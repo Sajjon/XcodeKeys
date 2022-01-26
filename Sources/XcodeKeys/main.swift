@@ -175,8 +175,7 @@ struct XcodeCommand: CustomStringConvertible {
 
     var instructionsValues: [String] { instructions.map { $0.rawValue + ":" } }
     var shortcutValue: String { shortcut.value }
-//    var humanReadable: String { instructions.map { $0.rawValue }.joined(separator: "\n") }
-    
+
     var description: String {
         "\(name): \(shortcut)"
     }
@@ -245,7 +244,12 @@ extension SimpleFile {
 }
 
 func defaultBindingsFile(fileManager: FileManager = .default) throws -> SimpleFile {
-    guard let sourceURL = Bundle.module.url(forResource: "Default", withExtension: "idekeybindings") else {
+    
+    // When building this SPM package from Xcode you will see a false error: `Type 'Bundle' has no member 'module'`
+    // this is relating to this bug: https://bugs.swift.org/browse/SR-13773
+    let bundle: Bundle = .module
+    
+    guard let sourceURL = bundle.url(forResource: "Default", withExtension: "idekeybindings") else {
         throw "Source bindings not found".intoError()
     }
     return try .at(url: sourceURL, fileManager: fileManager)

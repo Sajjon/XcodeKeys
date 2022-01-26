@@ -18,7 +18,7 @@ let package = Package(
             name: "XcodeKeys",
             dependencies: [.product(name: "Swiftline", package: "SwiftLine")],
             resources: [
-                .copy("Resources/Default.idekeybindings")
+                .process("Resources")
             ]
         ),
         .testTarget(
