@@ -172,6 +172,8 @@ struct XcodeCommand: CustomStringConvertible {
     }
     
     var instructionsValue: String { instructions.map { $0.rawValue + ":" }.joined(separator: ", ") }
+
+    var instructionsValues: [String] { instructions.map { $0.rawValue + ":" } }
     var shortcutValue: String { shortcut.value }
 //    var humanReadable: String { instructions.map { $0.rawValue }.joined(separator: "\n") }
     
@@ -305,7 +307,7 @@ func setKeys(
     }
     
     newCommands.forEach { command in
-        textKeyBindings[command.shortcutValue] = command.instructionsValue
+        textKeyBindings[command.shortcutValue] = command.instructionsValues
     }
     
     textKeyBindingsMeta[keyBindings] = textKeyBindings
@@ -336,8 +338,8 @@ func newCommands() -> [XcodeCommand] {
         name: "Delete current line",
         instructions: [
             .selectLine,
-            .deleteBackward,
-            .moveToEndOfLine
+            .deleteBackward
+            // .moveToEndOfLine
         ], shortcut: .init(keys: [
             .modifier(.shift),
             .modifier(.command),
